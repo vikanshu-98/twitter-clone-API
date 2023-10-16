@@ -1,8 +1,10 @@
 import monoose from 'mongoose'
-
-const connectDB = ()=>{
-    monoose.connect()
+import config from '../config'
+const connectdb = async ()=>{
+    monoose.connect(config.mongoose.uri)
 }
 
 
-export default {connectDB}
+export default {
+    connectdb
+}
