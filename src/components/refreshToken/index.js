@@ -1,1 +1,1 @@
-export {default as refresToken} from './refreshToken.model'
+export {default as refreshTokens} from './refreshToken.model'

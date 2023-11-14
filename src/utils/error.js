@@ -24,7 +24,6 @@ const handleError=(err,req,res,next)=>{
         message:err.message||'Internal Server Error',
         ...(config.debugMode.toLowerCase()=='true' && {originalError:err.stack})
     }
-    console.log(data);
     if(err instanceof ErrorHandler){
         statusCode=err.status;
         data={

@@ -20,5 +20,8 @@ export default {
         secretTokenExpiry:process.env.SECRET_TOKEN_EXPIRY,
         refreshToken:process.env.REFRESH_TOKEN_KEY,
         refreshTokenExpiry:process.env.REFRESh_TOKEN_EXPIRY
+    },
+    js:{
+        refreshTokenExpiry:process.env.REFRESh_TOKEN_EXPIRY_TIME_FOR_JS
     }
 }

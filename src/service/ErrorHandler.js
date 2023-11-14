@@ -12,4 +12,12 @@ export default class ErrorHandler extends Error{
     static badRequest(message="Bad Request"){
         return new ErrorHandler(400,message)
     }
+
+    static unauthenticated(message="you are not authenticated"){
+        return new ErrorHandler(401,message)
+    }
+
+    static unauthorized(message="you are not authorized"){
+        return new ErrorHandler(403,message)
+    }
 }

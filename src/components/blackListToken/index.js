@@ -1,0 +1,1 @@
+export { default as BlackListedToken} from './blacklistToken.model'

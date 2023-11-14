@@ -16,5 +16,11 @@ const login ={
     })
 };
 
+const refreshTokens ={
+    body:Joi.object().keys({ 
+        refreshToken:Joi.string().required()
+    })
+};
 
-export default {register,login}
+
+export default {register,login,refreshTokens}

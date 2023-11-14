@@ -4,7 +4,7 @@ import validator from 'validator'
 import roles from "../../config/roles";
 import auth from "../../utils/auth";
 import config from "../../config";
-
+import paginatePlugin from "../../utils/pagination";
 
 const Schema = mongoose.Schema
 
@@ -50,7 +50,7 @@ const userSchema = new Schema({
     },
     role:{
         type:String,
-        enum:roles,
+        enum:roles.roles,
         default:'user'
     },
     avatar:{
@@ -106,11 +106,23 @@ userSchema.methods.generateToken = function(expiry=config.jwt.secretTokenExpiry,
 userSchema.statics.findByCredentials = async function(username,password,isEmail){
     const user =await this.findOne({[isEmail?'email':'username']:username})
     if(!user)
-        throw new ErrorHandler.badRequest('Invalid login credentials')
+        throw ErrorHandler.badRequest('Invalid login credentials')
     if(!await auth.comparePassword(user.password,password))
-        throw new ErrorHandler.badRequest('Invalid login credentials')
+        throw ErrorHandler.badRequest('Invalid login credentials')
 
     return user;
 }
+
+userSchema.methods.getOnlySpecificData=function(){
+    return {
+        name:this.name,
+        userName:this.userName,
+        email:this.email,
+        createdAt:this.createdAt,
+        role:this.role
+    }
+}
+
+userSchema.plugin(paginatePlugin)
 
 export default mongoose.model('User',userSchema,'users')
