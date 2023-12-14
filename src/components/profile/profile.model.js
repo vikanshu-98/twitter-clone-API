@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import ErrorHandler from "../../service/ErrorHandler";
+import paginatePlugin from "../../utils/pagination";
 const Schema =mongoose.Schema;
 
-const profileSchema = new Schema({
+const ProfileSchema = new Schema({
     user:{
         type:Schema.Types.ObjectId,
         ref:'User'
@@ -43,4 +44,24 @@ const profileSchema = new Schema({
 },{timestamps:true})
 
 
-export default mongoose.model('profile',profileSchema,'Profiles')
+
+ProfileSchema.methods.isFollow = function(userId) {
+    return this.following.some((id) => id.equals(userId));
+};
+
+ProfileSchema.methods.isFollower = function(userId) {
+    return this.followers.some((id) => id.equals(userId));
+};
+
+ProfileSchema.methods.follow = function(userId) {
+    if(!(this.following.some((id) => id.equals(userId)))){
+        this.following.push(userId)
+        this.save()
+    }
+    return Promise.resolve(this)
+};
+
+ProfileSchema.plugin(paginatePlugin)
+ 
+
+export default mongoose.model('profile',ProfileSchema,'Profiles')

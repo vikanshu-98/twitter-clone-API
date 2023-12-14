@@ -28,7 +28,7 @@ const authController={
             ])
             const currentDate = new Date()
             currentDate.setDate(currentDate.getDate()+config.js.refreshTokenExpiry) 
-            await refresToken.create({refresh_token:refreshToken,user:user._id,expireIn:currentDate})
+            await refreshTokens.create({refresh_token:refreshToken,user:user._id,expireIn:currentDate})
 
             return res.data({accessToken,refreshToken,user},201)
         }catch(err){

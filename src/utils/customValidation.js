@@ -19,7 +19,6 @@ function username(value, helpers) {
 }
 
 function ObjectId(value, helpers) {
-    console.log(helpers);
     if (!value.match(/^[0-9a-fA-F]{24}$/)) {
         helpers.message('{{#label}} must be a valid mongo id');
     }

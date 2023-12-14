@@ -7,9 +7,7 @@ const verifyCallback =  (req,resolve,reject,rights)=>(error,user,info)=>{
         return reject(ErrorHandler.unauthenticated())
 
     req.user =user;
-    console.log('sd');
     if(user.role && user.role=='user'){
-        console.log('sd');
         return resolve()
          
     }
