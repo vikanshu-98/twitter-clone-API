@@ -7,19 +7,13 @@ const verifyCallback =  (req,resolve,reject,rights)=>(error,user,info)=>{
         return reject(ErrorHandler.unauthenticated())
 
     req.user =user;
-    if(user.role && user.role=='user'){
-        return resolve()
-         
-    }
+     
     if(rights.length){
         const userRights = roles.roleRight.get(user.role)
-        if(userRights.length==0)  return reject(ErrorHandler.unauthorized())
-        
-        const hasRights = rights.every((elem)=>userRights.includes(elem))
-        if(!hasRights && !req.params.userId!==user.id)
+        const hasRights  = rights.every((elem)=>userRights.includes(elem))
+        if(!hasRights && req.params.userId!==user.id)
             return reject(ErrorHandler.unauthorized())
     }
-
     resolve()
 }
 

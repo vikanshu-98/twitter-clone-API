@@ -61,6 +61,15 @@ ProfileSchema.methods.follow = function(userId) {
     return Promise.resolve(this)
 };
 
+ProfileSchema.methods.unFollow = function(userId) {
+
+    if((this.following.some((id) => id.equals(userId)))){
+        this.following.remove(userId)
+        this.save()
+    }
+    return Promise.resolve(this)
+};
+
 ProfileSchema.plugin(paginatePlugin)
  
 

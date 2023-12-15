@@ -48,8 +48,7 @@ const ProfileController ={
                 Profile.find({user:loginUserId}),
                 Profile.find({user:userId})
             ])
-            console.log(AuthUserProfile[0].isFollow(userId));
-            console.log(profileToFollow);
+             
             if(!profileToFollow)
                 next(ErrorHandler.notFound('profile does not exists!!!'))
 
@@ -63,6 +62,44 @@ const ProfileController ={
         } catch (error) {
             next(error)   
         }
+    },
+
+    async  unfollowProfile(req,res,next){
+        try {
+            const {_id:authUserId}    = req.user;
+            const {userId:unfollowId} =  req.params;
+            if(unfollowId==authUserId.toString())
+                return next(ErrorHandler.badRequest('you can not follow own profile!!'))   
+            const [AuthUserProfile,profileToUnFollow] = await Promise.all([
+                Profile.findOne({user:authUserId}),
+                Profile.findOne({user:unfollowId})
+            ])
+            if(!profileToUnFollow)
+                return next(ErrorHandler.notFound('profile does not exist!!'))  
+                
+            if(!AuthUserProfile.isFollow(unfollowId))
+                return next(ErrorHandler.badRequest('you do not follow that profile !!'))   
+                
+            profileToUnFollow.followers.remove(authUserId)
+            const [updateProfile] = await Promise.all([AuthUserProfile.unFollow(unfollowId),profileToUnFollow.save()])
+            return res.data(updateProfile)
+        } catch (error) {
+            next(error)
+        }
+    },
+
+ 
+    async updateProfileForAdmin(req,res,next){  
+        const {userId} = req.params;
+        const fields   = ['bio', 'location', 'website', 'birthday', 'backgroundImage'];
+        const newValue = pick(req.body,fields)
+        const prof     = await Profile.findOne({user:userId})
+        if(!prof)
+            return next(ErrorHandler.notFound('profile not found!!!'))  
+
+        Object.assign(prof,newValue);
+        await prof.save();
+        return res.data(prof)
     }
 }
 

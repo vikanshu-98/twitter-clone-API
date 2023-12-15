@@ -18,7 +18,19 @@ const profileValidation={
             following:Joi.string().custom(customValidation.ObjectId),
             sortBy:Joi.string(),
         })
+    },
+    updateProfile:{
+        query:Joi.object().keys({
+            userId:Joi.string().custom(customValidation.ObjectId)
+        }),
+        body:Joi.object().keys({
+            bio:Joi.string().max(255).allow(''),
+            location:Joi.string().max(255).allow(''),
+            website:Joi.string().custom(customValidation.url).max(255).allow(''),
+            birthday:Joi.date().allow(''),
+            backgroundImage:Joi.string().custom(customValidation.url).max(255).allow('')
+        }).min(1)
     }
 }
-
+ 
 export default profileValidation
