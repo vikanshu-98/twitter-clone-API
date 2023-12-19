@@ -70,6 +70,29 @@ ProfileSchema.methods.unFollow = function(userId) {
     return Promise.resolve(this)
 };
 
+
+
+ProfileSchema.methods.isLikes = function(tweetId){
+    return this.likes.some(id=>id.equals(tweetId))
+}
+
+ProfileSchema.methods.like = function(tweetId){
+    if(!(this.likes.some((id)=>id.equals(tweetId)))){
+        this.likes.push(tweetId)
+        this.save()
+    }
+    return Promise.resolve(this)
+}
+
+
+ProfileSchema.methods.unlike = function (tweetId){
+    if(this.likes.some(id=>id.equals(tweetId))){
+        this.likes.remove(tweetId)
+        this.save()
+    }
+    return Promise.resolve(this)
+}
+
 ProfileSchema.plugin(paginatePlugin)
  
 
