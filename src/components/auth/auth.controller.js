@@ -109,6 +109,8 @@ const authController={
             if(await isPresent.remove())
                 res.success(200,"logout successfully!!!!")
             
+            await BlackListedToken.create({token:refreshToken,user:id})
+            
 
         } catch (error) {
             next(error)
