@@ -63,21 +63,7 @@ const authController={
     async refershToken(req,res,next){
         try {
             const {refreshToken}= req.body
-            const {id,role} = auth.verifyToken(refreshToken,config.jwt.refreshToken); //first check token is valid
-            
-            const isBlackListed = await BlackListedToken.findOne({$and:[{token:refreshToken},{user:id}]}) // check kra ke blacklisted toh nahi h nah
-            if(isBlackListed)
-                return next(ErrorHandler.unauthorized('Invalid refresh token because this token is blacklisted !!'))
- 
-            const isPresent = await refreshTokens.findOne({refresh_token:refreshToken}); // chk kra ke refresh token table toh present h nah
-            if(!isPresent)
-                return next(ErrorHandler.unauthorized('Invalid refresh token!!'))
-
-            const user  = await Users.findOne({_id:id})
-            if(!user)
-                return next(ErrorHandler.unauthorized('Invalid refresh token!!'))
-        
-            
+            const user =    req.user 
             const [accessToken , refreshToken1] =  await Promise.all([
                 user.generateToken(),
                 user.generateToken(config.jwt.refreshTokenExpiry,config.jwt.refreshToken),
@@ -97,14 +83,9 @@ const authController={
     async logout(req,res,next){
         try {   
             const {refreshToken}= req.body
-            const {id,role} = auth.verifyToken(refreshToken,config.jwt.refreshToken); //first check token is valid
-            const isBlackListed = await BlackListedToken.findOne({$and:[{token:refreshToken},{user:id}]}) // check kra ke blacklisted toh nahi h nah
-            if(isBlackListed)
-                return next(ErrorHandler.unauthorized('Invalid refresh token because this token is blacklisted'))
-                
-            const isPresent = await refreshTokens.findOne({$and:[{refresh_token:refreshToken},{user:id}]}); // chk kra ke refresh token table toh present h nah
-            if(!isPresent)
-                return next(ErrorHandler.unauthorized('Invalid refresh token!!'))
+            // const isPresent = await refreshTokens.findOne({$and:[{refresh_token:refreshToken},{user:id}]}); // chk kra ke refresh token table toh present h nah
+            // if(!isPresent)
+            //     return next(ErrorHandler.unauthorized('Invalid refresh token!!'))
             
             if(await isPresent.remove())
                 res.success(200,"logout successfully!!!!")
