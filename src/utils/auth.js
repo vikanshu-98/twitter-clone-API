@@ -16,7 +16,7 @@ const hashedPassword = async function(password,salt=10){
     return await bcrypt.hash(password,salt=10);
 }
 
-const comparePassword = async function(password,userString){console.log(password)
+const comparePassword = async function(password,userString){
     return await bcrypt.compare(userString,password)
 
 }

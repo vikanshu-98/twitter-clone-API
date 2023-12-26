@@ -16,5 +16,7 @@ router.route('/like/:tweetId')
 
 router.route('/:tweetId')
 .get(validate(TweetValidation.likeValidation),TwitterController.getSingleTweet)
+.patch(auth(),validate(TweetValidation.updateTweet),TwitterController.updateTweet)
+.delete(auth(),validate(TweetValidation.likeValidation),TwitterController.deleteTweet)
 
 export default  router

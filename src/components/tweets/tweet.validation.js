@@ -24,6 +24,14 @@ const TweetValidation={
         query:Joi.object().keys({
             tweetId:Joi.string().custom(customValidation.ObjectId)
         })
+    },
+    updateTweet:{
+        query:Joi.object().keys({
+            tweetId:Joi.string().custom(customValidation.ObjectId)
+        }),
+        body:Joi.object().keys({
+            text:Joi.string().required().min(1).max(288)
+        })
     }
 
 

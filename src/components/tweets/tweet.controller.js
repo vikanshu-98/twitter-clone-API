@@ -91,6 +91,42 @@ const TwitterController ={
         } catch (error) {
             next(error)
         }
+    },
+    updateTweet: async function(req,res,next){
+        const {tweetId}    = req.params
+        const {_id:userId} = req.user
+        const text         = pick(req.body,['text'])
+        const isValidTweet = await Tweets.findById(tweetId)
+        if(!isValidTweet)
+            return next(ErrorHandler.notFound('Invalid tweet!!'))
+        
+        if(!(isValidTweet.author.equals(userId)) && req.user.role !='admin')
+            return next(ErrorHandler.unauthorized('you can not update someone tweets!!'))    
+
+        Object.assign(isValidTweet,text)
+        await isValidTweet.save()
+        return res.data(isValidTweet)
+    },
+    deleteTweet: async function(req,res,next){
+        const {tweetId}    = req.params
+        const {_id:userId} = req.user
+        const text         = pick(req.body,['text'])
+        const isValidTweet = await Tweets.findById(tweetId)
+        if(!isValidTweet)
+            return next(ErrorHandler.notFound('Invalid tweet!!'))
+        
+        if(!(isValidTweet.author.equals(userId)) && req.user.role !='admin')
+            return next(ErrorHandler.unauthorized('you can not update someone tweets!!'))    
+        
+            
+        await isValidTweet.remove() 
+ 
+        if(isValidTweet.replyTo){
+            const originalTweet= await Tweets.findById(isValidTweet.replyTo)
+            originalTweet.updateReplyCount()   
+        } 
+        return res.data(isValidTweet)
+
     }
 
 }
