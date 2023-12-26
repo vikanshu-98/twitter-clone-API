@@ -83,10 +83,6 @@ const authController={
     async logout(req,res,next){
         try {   
             const {refreshToken}= req.body
-            // const isPresent = await refreshTokens.findOne({$and:[{refresh_token:refreshToken},{user:id}]}); // chk kra ke refresh token table toh present h nah
-            // if(!isPresent)
-            //     return next(ErrorHandler.unauthorized('Invalid refresh token!!'))
-            
             if(await isPresent.remove())
                 res.success(200,"logout successfully!!!!")
             
