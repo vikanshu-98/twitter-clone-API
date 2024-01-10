@@ -6,7 +6,7 @@ const validate=(schema)=>(req,res,next)=>{
     const obj = pick(req,Object.keys(validSchemma)) 
     const {error,value}=Joi.compile(validSchemma).prefs({errors:{label:'key'}}).validate(obj)
     if(error){
-        console.log(error)
+        // console.log(error)
         next(error)
 
     }

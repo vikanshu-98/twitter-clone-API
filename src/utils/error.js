@@ -17,7 +17,7 @@ const handleError=(err,req,res,next)=>{
         if(config.debugMode.toLowerCase()=='true')
             logger.error(err)
     }
-    console.log(err.status);
+    // console.log(err.status);
 
     let statusCode =err.statusCode||500;
     let data={

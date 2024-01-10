@@ -66,7 +66,7 @@ const userController ={
     async deleteUser(req,res,next){
         try {
             const {userId} = req.params
-            console.log(userId)
+            // console.log(userId)
             const user = await Users.findById(userId)
             if(!user)
                 return next(ErrorHandler.notFound('User Not Found.'))

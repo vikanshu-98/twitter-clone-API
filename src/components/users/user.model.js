@@ -115,6 +115,7 @@ userSchema.statics.findByCredentials = async function(username,password,isEmail)
 
 userSchema.methods.getOnlySpecificData=function(){
     return {
+        id:this._id,
         name:this.name,
         userName:this.userName,
         email:this.email,

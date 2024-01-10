@@ -96,4 +96,4 @@ ProfileSchema.methods.unlike = function (tweetId){
 ProfileSchema.plugin(paginatePlugin)
  
 
-export default mongoose.model('profile',ProfileSchema,'Profiles')
+export default mongoose.model('Profile',ProfileSchema,'Profiles')

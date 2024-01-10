@@ -3,7 +3,7 @@ import path from 'path'
 dotenv.config(path.join(__dirname,'../../.env'))
 
 export default {
-    env:"",
+    env:process.env.NODE_ENV,
     port: process.env.PORT,
     debugMode:process.env.DEBUG_MODE,
     mongoose:{

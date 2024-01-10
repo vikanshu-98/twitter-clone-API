@@ -10,7 +10,7 @@ connectdb.connectdb().then(()=>{
     server = app.listen(config.port,()=>{
         logger.info('server started on '+ config.port)
     })
-})
+}).catch(err=>logger.error(err))
  
 const exitHandler =()=>{
     if(server){

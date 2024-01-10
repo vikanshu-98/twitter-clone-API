@@ -19,8 +19,8 @@ const authController={
             if(await Users.isUserNameTaken(userBody.username))
                 return next(ErrorHandler.badRequest('User Name is already taken.'))
  
-            const user = await Users.create(userBody)
-            
+            let user = await Users.create(userBody)
+            user     = await Users.findOne({_id:user._id}).select('-password -__v')
             const [accessToken , refreshToken] = await Promise.all([
                 user.generateToken(),
                 user.generateToken(config.jwt.refreshTokenExpiry,config.jwt.refreshToken),
