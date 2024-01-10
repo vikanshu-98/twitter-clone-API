@@ -127,6 +127,36 @@ const TwitterController ={
         } 
         return res.data(isValidTweet)
 
+    },
+
+    // get latest tweet of following user and self tweet
+    getFeedTweets : async function(req,res,next){
+        const options= pick(req.query,['limit','page'])
+        const {_id:userId} = req.user
+        const profileData = await Profile.findOne({user:userId})
+        
+        options.populate={
+            path:'author',
+            select:['name','username','avatar']
+        }
+        options.sortBy='createdAt:desc'
+
+        const query = 
+        {
+            $and:[
+                {
+                    replyTo:null
+                },
+                {
+                    $or:[
+                        {author:userId},
+                        {author:{$in:profileData.following}}
+                    ]
+                }
+            ]
+        }
+
+        return res.data(await Tweets.paginate(options,query))
     }
 
 }

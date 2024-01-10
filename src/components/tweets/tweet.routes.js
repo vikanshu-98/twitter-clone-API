@@ -5,6 +5,8 @@ import TwitterController from './tweet.controller'
 import auth from '../../middleware/auth'
 const router  = express.Router() 
 
+router.route('/feedTweets').get(auth(),validate(TweetValidation.getFeedTweets),TwitterController.getFeedTweets)
+
 router.route('/')
 .get(validate(TweetValidation.getTweets),TwitterController.getTwittes)
 .post(auth(),validate(TweetValidation.createTwitter),TwitterController.createTwitter)
@@ -19,4 +21,6 @@ router.route('/:tweetId')
 .patch(auth(),validate(TweetValidation.updateTweet),TwitterController.updateTweet)
 .delete(auth(),validate(TweetValidation.likeValidation),TwitterController.deleteTweet)
 
+
+ 
 export default  router

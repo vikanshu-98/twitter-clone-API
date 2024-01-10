@@ -32,6 +32,14 @@ const TweetValidation={
         body:Joi.object().keys({
             text:Joi.string().required().min(1).max(288)
         })
+    },
+
+    getFeedTweets:{
+        query:Joi.object().keys({
+            limit:Joi.number().integer(),
+            page:Joi.number().integer()
+        })
+ 
     }
 
 
