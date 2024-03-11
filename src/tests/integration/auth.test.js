@@ -79,4 +79,50 @@ describe('Auth Routes',()=>{
         expect(res.body.error.data.message).toBe('User Name is already taken.')
       })
     })
+
+
+    describe('POST -/auth.login',()=>{
+      it('when email and password matched, should return user and token',async ()=>{
+        await userFixture.insertUser([userFixture.userOne])
+        const loginCredentials = {
+          username:userFixture.userOne.username,
+          password:userFixture.userOne.password
+        }
+        const res = await request(app).post('/api/auth/login').send(loginCredentials)
+        expect(res.statusCode).toBe(200)
+        expect(res.body.data.userDetails).not.toHaveProperty('password')
+        expect(res.body.data.userDetails).toMatchObject({
+          name:userFixture.userOne.name,
+          role:'user',
+          email:userFixture.userOne.email.toLocaleLowerCase()
+        })
+        expect(res.body.data.accessToken).toBeDefined()
+        expect(res.body.data.refreshToken).toBeDefined()
+      })
+
+
+      it('when email is not found, should be return 400',async()=>{
+        const loginCredentials={
+          username:userFixture.userOne.email,
+          password:userFixture.userOne.password
+        }
+
+        const res = await request(app).post('/api/auth/login').send(loginCredentials)
+        expect(res.statusCode).toBe(400)
+      })
+
+
+      test('when password is wrong, should be return 400',async()=>{
+        await userFixture.insertUser([userFixture.userOne])
+
+        const loginCredentials = {
+          username:userFixture.userOne.email,
+          password:'WrongPassword@231'
+        }
+
+        const res = await request(app).post('/api/auth/login').send(loginCredentials)
+        
+        expect(res.statusCode).toBe(400)
+      })
+    })
 })
