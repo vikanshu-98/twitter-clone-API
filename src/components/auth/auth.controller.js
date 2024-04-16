@@ -82,11 +82,14 @@ const authController={
     },
     async logout(req,res,next){
         try {   
-            const {refreshToken}= req.body
-            if(await isPresent.remove())
+            const {refreshToken} = req.body
+            const user           = req.user;
+            const isPresent      = await refreshTokens.findOne({$and:[{token:refreshToken},{user:user._id}]});
+            if(await isPresent.remove()){
+                await BlackListedToken.create({token:refreshToken,user:user._id});
                 res.success(200,"logout successfully!!!!")
-            
-            await BlackListedToken.create({token:refreshToken,user:id})
+            }
+ 
             
 
         } catch (error) {
