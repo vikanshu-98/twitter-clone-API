@@ -3,7 +3,7 @@ import pretty from 'pino-pretty'
 
 const p = pretty({
     colorize:true,
-    translateTime:"yyyy-dd-mm, h:mm:ss TT",
+    translateTime:"yyyy-mm-dd, h:mm:ss TT",
     sync:true, 
     // destination:"server.log",
      
